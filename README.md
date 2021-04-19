@@ -1,3 +1,7 @@
+Demo 截图：
+
+![开关关](https://github.com/starsnow/tuyaDemo/blob/main/off.jpg)
+![开关开](https://github.com/starsnow/tuyaDemo/blob/main/on.jpg)
 
 ## Note: This repository is inherited from the old Tuya Github repository: xxxxxx, which will be deprecated soon. Please use this repository for Tuya SDK development instead. For changing the existing remote repository URL, please check this tutorial: https://github.com/TuyaInc/tuya-weapp-demo
 ## An overview of the
