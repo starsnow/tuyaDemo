@@ -1,7 +1,7 @@
 // miniprogram/pages/home_center/common_panel/index.js.js
 import { getDevFunctions, getDeviceDetails, deviceControl } from '../../../utils/api/device-api'
 import wxMqtt from '../../../utils/mqtt/wxMqtt'
-
+import request from '../../../utils/request'
 
 Page({
 
@@ -69,7 +69,16 @@ Page({
 
     this.setData({ titleItem, roDpList, rwDpList, device_name: name, isRoDpListShow, isRwDpListShow, roDpListLength, icon })
   },
+  onShow: async function ()
+  {
+      console.info("on Show");
+      this.onReady();
+  },
 
+  onHide: function () 
+  {
+      console.info("HIDE");
+  },
   // 分离只上报功能点，可上报可下发功能点
   reducerDpList: function (status, functions) {
     // 处理功能点和状态的数据
@@ -125,9 +134,9 @@ Page({
       }
     })
 
-    if (typeof (rwDpList["switch_1"]) !== 'undefined')
+    if (typeof (rwDpList["switch"]) !== 'undefined')
     {
-      let isSwitchOn = rwDpList["switch_1"]['value'];
+      let isSwitchOn = rwDpList["switch"]['value'];
       if (isSwitchOn)
       {
         bgImage = '../../../image/iron.jpg';
@@ -152,8 +161,57 @@ Page({
   jumpTodeviceEditPage: function(){
     console.log('jumpTodeviceEditPage')
     const { icon, device_id, device_name } = this.data
+    console.log(this.data);
     wx.navigateTo({
       url: `/pages/home_center/device_manage/index?device_id=${device_id}&device_name=${device_name}&device_icon=${icon}`,
+    })
+  },
+
+  setHover: function (e, owner)
+  {
+    console.log(e);
+    console.log(owner);
+    console.log(e.target.style);
+  },
+
+  testGetDP: async function (e)
+  {
+    const params = {
+      // name 云函数的名称，必须使用 ty-service
+      name: "ty-service",
+      data: {
+        // action: "device.status",
+        action: "device.specifications",
+      // params 接口参数
+        params: {
+        "device_id": this.data.device_id, // 填写自己的设备 id
+        }
+      }
+    };
+    console.log(await request(params));
+  },
+
+  switchToggle: async function (e)
+  {
+    const { code, value } = this.data.rwDpList.switch;
+    const { device_id } = this.data;
+    console.log(this.data);
+    const { success } = await deviceControl(device_id, code, !value)
+    return;
+  },
+
+  jumpToStatisticPage: function(){
+    const { icon, device_id, device_name } = this.data
+    wx.navigateTo({
+      url: `/pages/home_center/device_manage/index?device_id=${device_id}&device_name=${device_name}&device_icon=${icon}`,
+    })
+  },
+
+  jumpToPowerStatisticsPage: function()
+  {
+    const { icon, device_id, device_name } = this.data
+    wx.navigateTo({
+      url: `/pages/home_center/power_statistics/index?device_id=${device_id}&device_name=${device_name}&device_icon=${icon}`,
     })
   }
 })

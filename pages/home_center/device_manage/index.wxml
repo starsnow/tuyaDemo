@@ -4,7 +4,8 @@
     <view class="device-icon">
       <image class="device-images" src="{{device_icon}}" />
     </view>
-    <text class="device-name">{{device_name}}</text>
+    <input class="device-name" value="{{device_name}}" focus bindblur="changeName"/>
+    <van-icon size="20" name="edit" />
   </view>
 
   <view class="device-block" bindtap="showDeviceInfo">

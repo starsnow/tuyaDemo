@@ -5,7 +5,8 @@ Component({
    */
   properties: {
     device_name: String,
-    device_id: String
+    device_id: String,
+    color: String
   },
 
   /**

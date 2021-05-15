@@ -2,14 +2,17 @@
 <wxs src="./index.wxs" module="utils" />
 
 <image class="common-panel-backgroud" src="{{bgImage}}" />
-<navbar device_name="{{device_name}}" bind:jumpTodeviceEditPage="jumpTodeviceEditPage" />
+<navbar device_name="{{device_name}}" color="#FFF" bind:jumpTodeviceEditPage="jumpTodeviceEditPage" />
 
 <view class="common-panel-header">
-  <view class="common-panel-header-block">
+<!--
+    <view class="common-panel-header-block">
     <view class="common-panel-header-dpName">{{titleItem.name}}</view>
     <view class="common-panel-header-dpValue">{{titleItem.value}}</view>
   </view>
+-->
 </view>
+
 
 <block wx:if="{{isRoDpListShow}}">
   <view class="statuslist">
@@ -21,9 +24,10 @@
     </block>
   </view>
 </block>
+
 <view class="scroll-view">
-  <text class="show-msg">电量：{{powerStatics}}</text>
-  <block wx:if="{{isRwDpListShow}}">
+<!--
+    <block wx:if="{{isRwDpListShow}}">
     <block wx:for="{{rwDpList}}" wx:key="{{item.code}}" wx:for-item="item">
       <block wx:if="{{item.type === 'Boolean'}}">
         <Boolean model:isChecked="{{item.value}}" dpCode="{{item.code}}" dpName="{{item.name}}" bind:sendDp="sendDp" />
@@ -38,24 +42,32 @@
       </block>
     </block>
   </block>
+-->
 </view>
-<div class="bottom-view">
+
+<view class="bottom-view">
   <view class="bottom-container">
-    <view class="bottom-block">
-      <image class="bottom-item" src="../../../image/kaiguan.png" />
-      <text>开关</text>
+    <view class="bottom-block" hover-class="hover">
+      <image class="bottom-item" src="../../../image/kaiguan.png" bind:tap="switchToggle"/>
+      <text hover-class="hover">开关</text>
     </view>
-    <view class="bottom-block">
-      <image class="bottom-item" src="../../../image/bianji.png" />
-      <text>重命名</text>
+    <view class="bottom-block" hover-class="hover">
+      <image class="bottom-item" src="../../../image/bianji.png" bind:tap="jumpTodeviceEditPage"/>
+      <text hover-class="hover">编辑</text>
     </view>
-    <view class="bottom-block">
+    <view class="bottom-block" hover-class="hover">
       <image class="bottom-item" src="../../../image/dingshi.png" />
-      <text>定时</text>
+      <text hover-class="hover">定时</text>
     </view>
+    <view class="bottom-block" hover-class="hover">
+      <image class="bottom-item" src="../../../image/tongji.png" bind:tap="jumpToPowerStatisticsPage"/>
+      <text hover-class="hover">电量</text>
+    </view>
+    <!--
     <view class="bottom-block">
-      <image class="bottom-item" src="../../../image/tongji.png" />
-      <text>电量统计</text>
+      <image class="bottom-item" hover-class="hover" src="../../../image/dingshi.png" bind:tap="testGetDP"/>
+      <text hover-class="hover">测试</text>
     </view>
+    -->
   </view>
-</div>
+</view>

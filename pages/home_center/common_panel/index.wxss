@@ -65,22 +65,22 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  height: 54px;
-  padding: 16px 33px;
+  height: 54rpx;
+  padding: 16rpx 33rpx;
 }
 
 .roDpItem-two:not(:last-child) {
-  border-right: solid 1px #d6d6d6;
+  border-right: solid 1rpx #d6d6d6;
 }
 
 .roDpItem-one {
   display: flex;
   align-items: center;
   flex: 1;
-  height: 64px;
-  padding: 20px 24px;
+  height: 64rpx;
+  padding: 20rpx 24rpx;
   background-color: #fff;
-  border-radius: 14px;
+  border-radius: 14rpx;
 }
 
 .roDpItem-dpName {
@@ -109,10 +109,10 @@
 }
 
 .statuslist {
-  padding-top: 16px;
+  padding-top: 16rpx;
   display: flex;
   justify-content: center;
-  line-height: 12px;
+  line-height: 12rpx;
   flex-wrap: wrap;
 }
 
@@ -152,4 +152,8 @@
   display:flex;
   width: 48px;
   height: 48px;
+}
+
+.hover{
+  background-color: gray;
 }
