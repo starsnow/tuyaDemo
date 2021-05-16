@@ -72,19 +72,48 @@ Page({
 refreshStatistics : async function ()
 {
   const { start_date, end_date, start_time, end_time } = this.data;
-console.log({ start_date, end_date, start_time, end_time });
-  if (start_date < end_date)
-    return;
-
-  if (start_time < end_time)
-    return;
-console.log("111111111111")
-  let statisticData = await this.getHourPowerStatistic(start_date.replaceAll("-", "") + start_time.slice(0, 2), end_date.replaceAll("-", "") + end_time.slice(0, 2));
-  let chartData = 
+  console.log({ start_date, end_date, start_time, end_time });
+  if ((start_date + " " + start_time) > (end_date + " " + end_time))
   {
-    categories: Object.keys(statisticData.hours),
-    data: Object.values(statisticData.hours)
-  };
+    wx.showToast({
+      title: '错误：\n开始时间大于结束时间。',
+      icon: 'none',
+      duration: 2000
+    });
+    return;
+  }
+
+  let statisticData, chartData;
+  if (start_date == end_date)
+  {
+    if (start_time.slice(0, 2) == end_time.slice(0, 2))
+    {
+      wx.showToast({
+        title: '错误：小于一小时不能查询',
+        icon: 'none',
+        duration: 2000
+      });
+      return;
+    }
+
+    statisticData = await this.getHourPowerStatistic(start_date.replaceAll("-", "") + start_time.slice(0, 2), end_date.replaceAll("-", "") + end_time.slice(0, 2));
+    console.log(statisticData);
+    chartData = 
+    {
+      categories: Object.keys(statisticData.hours),
+      data: Object.values(statisticData.hours)
+    };
+  }
+  else
+  {
+    statisticData = await this.getDayPowerStatistic(start_date.replaceAll("-", ""), end_date.replaceAll("-", ""));
+    console.log(statisticData);
+    chartData = 
+    {
+      categories: Object.keys(statisticData.days),
+      data: Object.values(statisticData.days)
+    };
+  }
   console.log("2222222222222")
   this.updateData(chartData);
   console.log("33333333333")
@@ -100,7 +129,9 @@ showTodayStatistics : async function ()
   let end_time = "23:59";
 
   this.setData({start_date, start_time, end_date, end_time});
+  this.refreshStatistics();
 
+  /*
   let statisticData = await this.getHourPowerStatistic(start_date.replaceAll("-", "") + start_time.slice(0, 2), end_date.replaceAll("-", "") + end_time.slice(0, 2));
   let chartData = 
   {
@@ -109,6 +140,7 @@ showTodayStatistics : async function ()
   };
 
   this.updateData(chartData);
+  */
 },
 
 showCurWeekStatistics : async function ()
@@ -122,7 +154,8 @@ showCurWeekStatistics : async function ()
   let end_time = "23:59";
 
   this.setData({start_date, start_time, end_date, end_time});
-
+  this.refreshStatistics();
+  /*
   let statisticData = await this.getDayPowerStatistic(start_date.replaceAll("-", ""), end_date.replaceAll("-", ""));
   console.log( statisticData);
   let chartData = 
@@ -132,6 +165,7 @@ showCurWeekStatistics : async function ()
   };
 
   this.updateData(chartData);
+  */
 },
 
 showCurMonthStatistics : async function ()
@@ -145,7 +179,8 @@ showCurMonthStatistics : async function ()
   let end_time = "23:59";
 
   this.setData({start_date, start_time, end_date, end_time});
-
+  this.refreshStatistics();
+/*
   let statisticData = await this.getDayPowerStatistic(start_date.replaceAll("-", ""), end_date.replaceAll("-", ""));
   console.log( statisticData);
   let chartData = 
@@ -155,6 +190,7 @@ showCurMonthStatistics : async function ()
   };
 
   this.updateData(chartData);
+  */
 },
 
 showCurYearStatistics : async function ()
@@ -168,7 +204,9 @@ showCurYearStatistics : async function ()
   let end_time = "23:59";
 
   this.setData({start_date, start_time, end_date, end_time});
+  this.refreshStatistics();
 
+  /*
   let statisticData = await this.getMonthPowerStatistic(start_date.slice(0, 4), end_date.slice(0, 4));
   console.log( statisticData);
   let chartData = 
@@ -178,6 +216,7 @@ showCurYearStatistics : async function ()
   };
 
   this.updateData(chartData);
+  */
 },
 
 getStatisticsData: function () {
@@ -199,7 +238,7 @@ updateData: function (statisticData) {
       name: this.data.device_name,
       data: chartData.data,
       format: function (val, name) {
-          return val.toFixed(2) + '千瓦时';
+          return val + '千瓦时';
       }
   }];
   lineChart.updateData({
@@ -354,8 +393,7 @@ showPowerStatistic: async function (e)
    */
   onLoad: async function (options) {
     console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxx");
-    const { device_icon, device_name, device_id } = options
-    this.data.device_id = device_id;
+    const { device_icon, device_name, device_id } = options;
     this.setData({ device_icon: `https://images.tuyacn.com/${device_icon}`, device_name, device_id });
     
     var windowWidth = 320;
@@ -388,7 +426,7 @@ showPowerStatistic: async function (e)
         yAxis: {
             title: '用电量 (千瓦时)',
             format: function (val) {
-                return val.toFixed(2);
+                return val;
             },
             min: 0
         },

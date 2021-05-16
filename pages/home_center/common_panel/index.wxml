@@ -56,7 +56,7 @@
       <text hover-class="hover">编辑</text>
     </view>
     <view class="bottom-block" hover-class="hover">
-      <image class="bottom-item" src="../../../image/dingshi.png" />
+      <image class="bottom-item" src="../../../image/dingshi.png" bindtap="jumpToTimerManagePage"/>
       <text hover-class="hover">定时</text>
     </view>
     <view class="bottom-block" hover-class="hover">

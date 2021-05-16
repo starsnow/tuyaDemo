@@ -73,6 +73,10 @@ Page({
       cloudInner.isDroped = false;
       this.setData({ cloudInner: { ...cloudInner } });
     }
+
+    wx.navigateTo({
+      url: `/pages/home_center/timer_edit_page/index`,
+    })
   },
 
   onClickHide: function () {

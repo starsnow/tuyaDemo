@@ -1,6 +1,8 @@
 {
   "pages": [
     "pages/guide/index",
+    "pages/home_center/timer_manage/index",
+    "pages/home_center/timer_edit_page/index",
     "pages/home_center/device_list/index",    
     "pages/home_center/common_panel/index",
     "pages/home_center/device_manage/index",

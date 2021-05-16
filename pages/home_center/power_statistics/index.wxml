@@ -45,6 +45,6 @@
         <button bindtap="showTodayStatistics">今天</button>
         <button bindtap="showCurWeekStatistics">本周</button>
         <button bindtap="showCurMonthStatistics">本月</button>
-        <!-- <button bindtap="showCurYearStatistics">今年</button> -->
+        <button bindtap="showCurYearStatistics">今年</button>
     </view>
 </view>
