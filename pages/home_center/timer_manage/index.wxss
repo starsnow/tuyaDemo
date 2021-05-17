@@ -2,7 +2,7 @@
 .bottom-view {
   display: flex;
   position: fixed;
-  bottom: 50rpx;
+  bottom: 0rpx;
   width:100%;
 }
 

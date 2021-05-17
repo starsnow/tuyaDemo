@@ -9,9 +9,11 @@ Page({
   data: {
     device_name: "",
     timer_list: [],
-    timer_category: "seesea_timer",
+    timer_category: "timer",
+    catetorys: [ "timer", "countdown" ],
     time_zone_id: "Asia/Shanghai",
-    time_zone: "+8:00"
+    time_zone: "+8:00",
+    week_name: "日一二三四五六".split(""),
   },
 
   getTimerList: async function ()
@@ -33,44 +35,78 @@ Page({
     this.setData({timer_list});
   },
 
-  addTimer: async function(loops, )
+  jumpToEditTimerPage : function ()
+  {
+    wx.navigateTo({
+      url: '../timer_edit_page/index',
+    });
+  },
+
+  toggleEnableTimer: async function (e)
+  {
+    console.log(e);
+
+    const param = {
+      name: "ty-service",
+      data:
+      {
+        "action": "timer.status",
+        "params": {
+          "device_id":this.data.device_id,
+          "category":this.data.timer_category,
+          "group_id":e.target.dataset.group_id,
+          "status":e.detail.value ? "1" : "0"
+        }
+      }
+    };
+    
+    console.log(await request(param));
+    this.getTimerList();
+  },
+
+  nullFunction : function (e) {},
+  
+  deleteTimer: async function (group_id)
   {
     const param = {
       name: "ty-service",
       data:
       {
-        "action": "timer.add",
+        "action": "timer.deleteByGroup",
         "params": {
-          "device_id":this.data.device_id,
-          "loops":"0000000",
-          "category":this.data.timer_category,
-          "timezone_id":this.data.time_zone_id,
-          "time_zone":this.data.time_zone,
-          "status": 0,
-          "instruct":[
-              {
-                  "functions":[
-                      {
-                          "code":"switch",
-                          "value":true
-                      }
-                  ],
-                  "date":"20220320",
-                  "time":"17:41"
-              }
-          ]
+          "device_id": this.data.device_id,
+          "category": this.data.timer_category,
+          "group_id": group_id
         }
       }
     };
-console.log(param);
+
     console.log(await request(param));
+    this.getTimerList();
   },
 
-  nullFunction : function (e) {},
-  
-  editTimer : function (e)
+  editTimer : async function (e)
   {
-    wx.showToast({ title: "xxx" });
+    let func = this.deleteTimer;
+    wx.showActionSheet({
+      itemList: ['编辑', '删除'],
+       async success (res) {
+        switch (res.tapIndex)
+        {
+          case 0:
+            // 编辑定时器
+            break;
+
+          case 1:
+            // 删除定时器
+            func(e.currentTarget.dataset.timer_group_id);
+            break;
+        }
+      },
+      fail (res) {
+        console.log(res.errMsg)
+      }
+    });
     console.log(e);
   },
 
@@ -98,7 +134,7 @@ console.log(param);
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-
+    this.getTimerList();
   },
 
   /**

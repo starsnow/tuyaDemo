@@ -75,7 +75,7 @@ Page({
     }
 
     wx.navigateTo({
-      url: `/pages/home_center/timer_edit_page/index`,
+      url: `/pages/home_center/timer_manage/index`,
     })
   },
 
