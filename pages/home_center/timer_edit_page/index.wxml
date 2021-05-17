@@ -63,5 +63,5 @@
     </view>
   </view>
 
-  <button type="primary" bindtap="addTimer">确定</button>
+  <button type="primary" bindtap="addOrEditTimer">确定</button>
 </view>

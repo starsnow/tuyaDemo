@@ -25,8 +25,34 @@ Page({
     categorys : [ "timer", "countdown" ],
     today: new Date()
   },
+  
+  getTimerInfo: async function (timer_group_id)
+  {
+    const param = {
+      name: "ty-service",
+      data:
+      {
+        "action": "timer.listByCategory",
+        "params": {
+          "device_id": this.data.device_id,
+          "category": this.data.timer_category
+        }
+      }
+    };
 
-  addTimer: async function()
+    let timer_list = await request(param);
+    for (let timer_info of timer_list["groups"])
+    {
+      if (timer_info.id == timer_group_id)
+      {
+        return timer_info["timers"][0];
+      }
+    }
+
+    return {};
+  },
+
+  addOrEditTimer: async function()
   {
     this.data.timer_category = "timer";
     if (this.data.is_countdown)
@@ -58,7 +84,7 @@ Page({
                 "functions":[
                   {
                     "code":"switch",
-                    "value":true
+                    "value":this.data.switch_action_on
                   }
                 ],
                 "date":this.data.date.replaceAll("-", ""),
@@ -70,11 +96,24 @@ Page({
     };
 
     console.log(param);
+    console.log(this.data);
+    if (! this.data.is_loop)
+    {
+      this.data.loops = "0000000";
+      param.data.params.loops = "0000000";
+    }
+
     if (this.data.loops != "0000000")
     {
       delete(param.data.params.instruct[0].date);
     }
 
+    // 如果有组 id，说明是编辑定时器
+    if (this.data.timer_group_id)
+    {
+      param.data.params.group_id = this.data.timer_group_id;
+      param.data.action = "timer.edit";
+    }
     console.log(param);
     console.log(await request(param));
     wx.navigateBack({
@@ -98,6 +137,8 @@ Page({
 
   onWeekdayChange: function(e)
   {
+    console.log(e.currentTarget);
+    console.log(this.data.loops_ar)
     this.data.loops_ar[e.currentTarget.dataset.weekday] = e.detail.value ? "1" : "0";
     let loops = this.data.loops_ar.join("");
     console.log(this.data.loops_ar);
@@ -112,15 +153,43 @@ Page({
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function (options) {
-    // const { device_icon, device_name, device_id } = options;
-    const { device_icon, device_name, device_id } = {device_id: "327508562cf43233d493", device_name: "aaa", device_icon: "smart/icon/1547483729ogjp5rjrqb_0.png"};
-    let loops_ar = this.data.loops.split("");
-    let today = new Date();
-    let date = today.Format("yyyy-MM-dd");
-    let time = "00:00";
+  onLoad: async function (options) {
+    const { device_icon, device_name, device_id, timer_group_id } = options;
+    // const { device_icon, device_name, device_id } = {device_id: "327508562cf43233d493", device_name: "aaa", device_icon: "smart/icon/1547483729ogjp5rjrqb_0.png"};
+    console.log(timer_group_id);
+    this.setData({ device_icon: `https://images.tuyacn.com/${device_icon}`, device_name, device_id, timer_group_id});
 
-    this.setData({ device_icon: `https://images.tuyacn.com/${device_icon}`, device_name, device_id, loops_ar, today, date, time });
+    let loops, status, time, timer_id, date, alias_name, loops_ar, switch_action_on, is_loop;
+    var timer_info;
+    
+    switch_action_on = true;
+    loops = this.data.loops;
+    date = new Date().Format("yyyy-MM-dd");
+    time = "00:00";
+    is_loop = true;
+    
+    if (timer_group_id)
+    {
+      timer_info = await this.getTimerInfo(timer_group_id);
+      console.log(timer_info);
+      if (timer_info.hasOwnProperty("timer_id"))
+      {
+        loops = timer_info.loops;
+        time = timer_info.time;
+        if (loops == "0000000")
+          date = timer_info.date.slice(0, 4) + "-" + timer_info.date.slice(4, 6)+ "-" + timer_info.date.slice(6, 8);
+        alias_name = timer_info.alias_name;
+        timer_id = timer_info.timer_id;
+        status = timer_info.status;
+        switch_action_on = timer_info.functions[0].value;
+      }
+    }
+    loops_ar = loops.split("");
+    if (loops == "0000000")
+      is_loop = false;
+
+    console.log({ loops, status, time, timer_id, date, alias_name, switch_action_on })
+    this.setData({ loops_ar, loops, is_loop, status, time, timer_id, date, alias_name, switch_action_on });
   },
 
   /**

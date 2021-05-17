@@ -8,7 +8,11 @@ Page({
    */
   data: {
     active: 0,
-    deviceList: []
+    deviceList: [],
+    sceneList: ["tv", "leave", "sleep" ],
+    sceneName : {tv: "看电视", leave : "离家", sleep : "睡觉" },
+    autoList: ["rain", "morning"],
+    autoName: {rain: "下雨", morning: "早上到了" }
   },
 
   /**

@@ -17,13 +17,13 @@
     </van-tab>
     <van-tab title="场景">
       <scroll-view class="scroll-list">
-        <view wx:if="{{deviceList.length > 0}}" class="base-list">
-          <block wx:for="{{deviceList}}" wx:key="{{device.id}}" wx:for-index="idx" wx:for-item="device">
-            <view class="base-item {{(idx+1)%2 !== 0 && 'base-item-left'}}" bindtap="jumpToPanel" data-device="{{device}}">
+        <view wx:if="{{sceneList.length > 0}}" class="base-list">
+          <block wx:for="{{sceneList}}" wx:for-index="idx" wx:for-item="scene">
+            <view class="base-item {{(idx+1)%2 !== 0 && 'base-item-left'}}" bindtap="jumpToPanel" data-device="{{scene}}">
               <view class="base-icon">
-                <image class="base-icon-images" src="{{device.icon}}"/>
+                <image class="base-icon-images" src="/image/{{scene}}.png"/>
               </view>
-              <view class="base-name">{{device.name}}</view>
+              <view class="base-name">{{sceneName[scene]}}</view>
             </view>
           </block>
         </view>
@@ -31,13 +31,13 @@
     </van-tab>
     <van-tab title="自动化">
       <scroll-view class="scroll-list">
-        <view wx:if="{{deviceList.length > 0}}" class="base-list">
-          <block wx:for="{{deviceList}}" wx:key="{{device.id}}" wx:for-index="idx" wx:for-item="device">
+        <view wx:if="{{autoList.length > 0}}" class="base-list">
+          <block wx:for="{{autoList}}"  wx:for-index="idx" wx:for-item="device">
             <view class="base-item {{(idx+1)%2 !== 0 && 'base-item-left'}}" bindtap="jumpToPanel" data-device="{{device}}">
               <view class="base-icon">
-                <image class="base-icon-images" src="{{device.icon}}"/>
+                <image class="base-icon-images" src="/image/{{device}}.png"/>
               </view>
-              <view class="base-name">{{device.name}}</view>
+              <view class="base-name">{{autoName[device]}}</view>
             </view>
           </block>
         </view>

@@ -56,3 +56,11 @@
   justify-content: space-between;
   flex-wrap: nowrap;
 }
+
+.timer_week_text {
+  font-size: 70%;
+}
+
+.timer_week_text_disabled {
+  color: lightgray;
+}

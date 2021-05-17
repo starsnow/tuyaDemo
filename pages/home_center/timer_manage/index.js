@@ -37,8 +37,9 @@ Page({
 
   jumpToEditTimerPage : function ()
   {
+    const {device_id, device_name, device_icon } = this.data;
     wx.navigateTo({
-      url: '../timer_edit_page/index',
+      url: `../timer_edit_page/index?device_id=${device_id}&device_name=${device_name}&device_icon=${device_icon}`
     });
   },
 
@@ -88,6 +89,7 @@ Page({
   editTimer : async function (e)
   {
     let func = this.deleteTimer;
+    const {device_id, device_name, device_icon } = this.data;
     wx.showActionSheet({
       itemList: ['编辑', '删除'],
        async success (res) {
@@ -95,6 +97,9 @@ Page({
         {
           case 0:
             // 编辑定时器
+            wx.navigateTo({
+              url: `../timer_edit_page/index?timer_group_id=${e.currentTarget.dataset.timer_group_id}&device_id=${device_id}&device_name=${device_name}&device_icon=${device_icon}` ,
+            });
             break;
 
           case 1:
@@ -114,9 +119,8 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    options;
-    // const { device_icon, device_name, device_id } = options;
-    const { device_icon, device_name, device_id } = {device_id: "327508562cf43233d493", device_name: "aaa", device_icon: "smart/icon/1547483729ogjp5rjrqb_0.png"};
+    const { device_icon, device_name, device_id } = options;
+    // const { device_icon, device_name, device_id } = {device_id: "327508562cf43233d493", device_name: "aaa", device_icon: "smart/icon/1547483729ogjp5rjrqb_0.png"};
     console.log(options);
     this.setData({ device_icon: `https://images.tuyacn.com/${device_icon}`, device_name, device_id });
 
